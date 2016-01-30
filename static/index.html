@@ -1,0 +1,29 @@
+<html>
+  <body>
+    <h1>OpenCV with NodeJS on Heroku Sample App</h1>
+    <form id='mainForm'>
+      Select image for facial recognition
+      <input type='file' name='file' accept='image/*' id='imageInput'/>
+    </form><br />
+    <img id='resultImg' />
+    <script>
+      (function (){
+        var form = document.getElementById('mainForm')
+        var imageInput = document.getElementById('imageInput')
+        imageInput.addEventListener('change', function (event) {
+          event.preventDefault()
+          var request = new XMLHttpRequest()
+          request.open("POST", '/post')
+          request.onreadystatechange = function () {
+            if (request.readyState < 4) return
+            var content = JSON.parse(request.responseText).content
+            if (!content) return
+            document.getElementById('resultImg').src = content
+          }
+          request.send(new FormData(form))
+          return false
+        })
+      })()
+    </script>
+  </body>
+</html>
